@@ -19,6 +19,7 @@ extern NSString *SGReachabilityChangedNotification;
 
 typedef NS_ENUM(NSUInteger, SGNetworkStatus) {
     SGNetworkStatusNone,
+    SGNetworkStatus2G,
     SGNetworkStatus3G,
     SGNetworkStatus4G,
     SGNetworkStatusWifi,

@@ -17,7 +17,8 @@
 		1812BC301D903F6F005FC657 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1812BC2F1D903F6F005FC657 /* Reachability.m */; };
 		1812BC331D903FD0005FC657 /* SGNetObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1812BC321D903FD0005FC657 /* SGNetObserver.m */; };
 		1812BC381D906C17005FC657 /* SimplePinger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1812BC371D906C17005FC657 /* SimplePinger.m */; };
-		1812BC3A1D92DDEE005FC657 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1812BC391D92DDED005FC657 /* SystemConfiguration.framework */; };
+		867063642351C21B005819CD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 867063632351C21B005819CD /* CoreTelephony.framework */; };
+		867063662351C252005819CD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 867063652351C232005819CD /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +40,8 @@
 		1812BC321D903FD0005FC657 /* SGNetObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGNetObserver.m; sourceTree = "<group>"; };
 		1812BC361D906C17005FC657 /* SimplePinger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimplePinger.h; sourceTree = "<group>"; };
 		1812BC371D906C17005FC657 /* SimplePinger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimplePinger.m; sourceTree = "<group>"; };
-		1812BC391D92DDED005FC657 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		867063632351C21B005819CD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		867063652351C232005819CD /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1812BC3A1D92DDEE005FC657 /* SystemConfiguration.framework in Frameworks */,
+				867063662351C252005819CD /* SystemConfiguration.framework in Frameworks */,
+				867063642351C21B005819CD /* CoreTelephony.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,9 +60,9 @@
 		1812BC011D8F08BC005FC657 = {
 			isa = PBXGroup;
 			children = (
-				1812BC391D92DDED005FC657 /* SystemConfiguration.framework */,
 				1812BC0C1D8F08BC005FC657 /* SGNetObserverDemo */,
 				1812BC0B1D8F08BC005FC657 /* Products */,
+				867063622351C21B005819CD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +114,15 @@
 			path = SGNetObserver;
 			sourceTree = SOURCE_ROOT;
 		};
+		867063622351C21B005819CD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				867063652351C232005819CD /* SystemConfiguration.framework */,
+				867063632351C21B005819CD /* CoreTelephony.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -142,6 +154,7 @@
 				TargetAttributes = {
 					1812BC091D8F08BC005FC657 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = SR52437D77;
 					};
 				};
 			};
@@ -150,6 +163,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -299,6 +313,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = SR52437D77;
 				INFOPLIST_FILE = SGNetObserverDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iossinger.SGNetObserverDemo;
@@ -310,6 +325,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = SR52437D77;
 				INFOPLIST_FILE = SGNetObserverDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iossinger.SGNetObserverDemo;
@@ -336,6 +352,7 @@
 				1812BC231D8F08BC005FC657 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

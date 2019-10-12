@@ -9,6 +9,7 @@
 #import "SGNetObserver.h"
 #import "Reachability.h"
 #import "SimplePinger.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
 
 NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNotification";
 
@@ -126,42 +127,67 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     return _pinger;
 }
 #pragma mark - tools
+//- (SGNetworkStatus)netWorkDetailStatus{
+//    UIApplication *app = [UIApplication sharedApplication];
+//    UIView *statusBar = [app valueForKeyPath:@"statusBar"];
+//    UIView *foregroundView = [statusBar valueForKeyPath:@"foregroundView"];
+//
+//    UIView *networkView = nil;
+//
+//    for (UIView *childView in foregroundView.subviews) {
+//        if ([childView isKindOfClass:NSClassFromString(@"UIStatusBarDataNetworkItemView")]) {
+//            networkView = childView;
+//        }
+//    }
+//
+//    SGNetworkStatus status = SGNetworkStatusNone;
+//
+//    if (networkView) {
+//        int netType = [[networkView valueForKeyPath:@"dataNetworkType"]intValue];
+//        switch (netType) {
+//            case 0:
+//                status = SGNetworkStatusNone;
+//                break;
+//            case 1://实际上是2G
+//                status = SGNetworkStatusUkonow;
+//                break;
+//            case 2:
+//                status = SGNetworkStatus3G;
+//                break;
+//            case 3:
+//                status = SGNetworkStatus4G;
+//                break;
+//            case 5:
+//                status = SGNetworkStatusWifi;
+//                break;
+//            default:
+//                status = SGNetworkStatusUkonow;
+//                break;
+//        }
+//    }
+//    return status;
+//}
+
 - (SGNetworkStatus)netWorkDetailStatus{
-    UIApplication *app = [UIApplication sharedApplication];
-    UIView *statusBar = [app valueForKeyPath:@"statusBar"];
-    UIView *foregroundView = [statusBar valueForKeyPath:@"foregroundView"];
-    
-    UIView *networkView = nil;
-    
-    for (UIView *childView in foregroundView.subviews) {
-        if ([childView isKindOfClass:NSClassFromString(@"UIStatusBarDataNetworkItemView")]) {
-            networkView = childView;
-        }
-    }
-    
     SGNetworkStatus status = SGNetworkStatusNone;
-    
-    if (networkView) {
-        int netType = [[networkView valueForKeyPath:@"dataNetworkType"]intValue];
-        switch (netType) {
-            case 0:
-                status = SGNetworkStatusNone;
-                break;
-            case 1://实际上是2G
-                status = SGNetworkStatusUkonow;
-                break;
-            case 2:
+    if (self.hostReachability.currentReachabilityStatus == ReachableViaWiFi) {
+        status = SGNetworkStatusWifi;
+    }else if (self.hostReachability.currentReachabilityStatus == ReachableViaWWAN){
+        CTTelephonyNetworkInfo *info = [CTTelephonyNetworkInfo new];
+        if ([info respondsToSelector:@selector(currentRadioAccessTechnology)]) {
+            NSString *currentStatus = info.currentRadioAccessTechnology;
+            NSArray *network2G = @[CTRadioAccessTechnologyGPRS, CTRadioAccessTechnologyEdge, CTRadioAccessTechnologyCDMA1x];
+            NSArray *network3G = @[CTRadioAccessTechnologyWCDMA, CTRadioAccessTechnologyHSDPA, CTRadioAccessTechnologyHSUPA, CTRadioAccessTechnologyCDMAEVDORev0, CTRadioAccessTechnologyCDMAEVDORevA, CTRadioAccessTechnologyCDMAEVDORevB, CTRadioAccessTechnologyeHRPD];
+            NSArray *network4G = @[CTRadioAccessTechnologyLTE];
+            if ([network2G containsObject:currentStatus]) {
+                status = SGNetworkStatus2G;
+            }else if ([network3G containsObject:currentStatus]) {
                 status = SGNetworkStatus3G;
-                break;
-            case 3:
+            }else if ([network4G containsObject:currentStatus]){
                 status = SGNetworkStatus4G;
-                break;
-            case 5:
-                status = SGNetworkStatusWifi;
-                break;
-            default:
+            }else {
                 status = SGNetworkStatusUkonow;
-                break;
+            }
         }
     }
     return status;
@@ -171,6 +197,7 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     return @{
              @(SGNetworkStatusNone)   : @"无网络",
              @(SGNetworkStatusUkonow) : @"未知网络",
+             @(SGNetworkStatus2G)     : @"3G网络",
              @(SGNetworkStatus3G)     : @"3G网络",
              @(SGNetworkStatus4G)     : @"4G网络",
              @(SGNetworkStatusWifi)   : @"WIFI网络",
