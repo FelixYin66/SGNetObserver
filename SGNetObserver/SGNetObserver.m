@@ -26,7 +26,7 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
 #pragma mark - 初始化
 + (instancetype)defultObsever{
     SGNetObserver *obsever = [[self alloc] init];
-    obsever.host = @"www.baidu.com";
+    obsever.host = @"test.thefront.com.cn";//@"www.baidu.com";
     return obsever;
 }
 
@@ -81,9 +81,6 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
 - (void)setNetworkStatus:(SGNetworkStatus)networkStatus{
     if (_networkStatus != networkStatus) {
         _networkStatus = networkStatus;
-        
-        NSLog(@"网络状态-----%@",self.networkDict[@(networkStatus)]);
-        
         //有代理
         if(self.delegate){//调用代理
             if ([self.delegate respondsToSelector:@selector(observer:host:networkStatusDidChanged:)]) {

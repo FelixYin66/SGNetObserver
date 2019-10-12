@@ -18,6 +18,12 @@
 
 @property (nonatomic,strong) NSTimer *sendTimer;
 
+//发送包开始时间
+@property(nonatomic,assign) CFTimeInterval starttime;
+
+//延时时长
+@property(nonatomic,assign) CFTimeInterval spendtime;
+
 /**
  *  发送失败记录,失败次数为failuretimes时,认为断网.
  */
@@ -69,11 +75,11 @@
     }
     
     self.pinger.delegate = self;
-    
     [self.pinger start];
 }
 
 - (void)sendPing{
+    self.starttime = CFAbsoluteTimeGetCurrent();
     [self.pinger sendPingWithData:nil];
 }
 
@@ -89,6 +95,7 @@
 #pragma mark - delegaet
 - (void)simplePing:(SimplePing *)pinger didStartWithAddress:(NSData *)address{
     NSLog(@"didStartPingWithAddress: %@",[self addressWithData:address]);
+    self.starttime = CFAbsoluteTimeGetCurrent();
     
     [self sendPing];
     
@@ -98,8 +105,10 @@
 }
 
 //发送成功,sequenceNumber范围:0~65535,超范围后从 0 开始
-- (void)simplsentePing:(SimplePing *)pinger didSendPacket:(NSData *)packet sequenceNumber:(uint16_t)sequenceNumber{
-     NSLog(@"#%u sent", sequenceNumber);
+
+- (void)simplePing:(SimplePing *)pinger didSendPacket:(NSData *)packet sequenceNumber:(uint16_t)sequenceNumber{
+    self.spendtime = CFAbsoluteTimeGetCurrent() - self.starttime;
+    NSLog(@"#%u sent send time == %@", sequenceNumber,@(self.spendtime*1000));
     
     if(sequenceNumber == 0){//重置
         [self.array removeAllObjects];
@@ -142,7 +151,7 @@
     
 }
 
-//根据data,计算host
+//获取主机IP
 - (NSString *)addressWithData:(NSData *)address{
     char *hostStr = malloc(NI_MAXHOST);
     memset(hostStr, 0, NI_MAXHOST);
