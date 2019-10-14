@@ -23,10 +23,12 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
 @end
 
 @implementation SGNetObserver
-#pragma mark - 初始化
+
+//    MARK:  - 初始化
+
 + (instancetype)defultObsever{
     SGNetObserver *obsever = [[self alloc] init];
-    obsever.host = @"test.thefront.com.cn";//@"www.baidu.com";
+    obsever.host = @"www.baidu.com";
     return obsever;
 }
 
@@ -49,7 +51,8 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     [self.hostReachability stopNotifier];
     [self.pinger stopNotifier];
 }
-#pragma mark - function
+
+//    MARK:  - function
 
 - (void)startNotifier{
     [self.hostReachability startNotifier];
@@ -61,23 +64,24 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     [self.pinger stopNotifier];
 }
 
-#pragma mark - delegate
+//    MARK: - delegate
+
 - (void)networkStatusDidChanged{
-    
     //获取两种方法得到的联网状态,并转为BOOL值
     BOOL status1 = [self.hostReachability currentReachabilityStatus];
-    
     BOOL status2 =  self.pinger.reachable;
-    
     //综合判断网络,判断原则:Reachability -> pinger
-    if (status1 && status2) {//有网
+    if (status1 && status2) {
+        //有网
         self.networkStatus = self.netWorkDetailStatus;
-    }else{//无网
+    }else{
+        //无网
         self.networkStatus = SGNetworkStatusNone;
     }
 }
 
-#pragma mark - setter
+//    MARK:  - setter
+
 - (void)setNetworkStatus:(SGNetworkStatus)networkStatus{
     if (_networkStatus != networkStatus) {
         _networkStatus = networkStatus;
@@ -94,7 +98,8 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     }
     
 }
-#pragma mark - getter
+
+//    MARK: - getter
 
 - (Reachability *)hostReachability{
     if (_hostReachability == nil) {
@@ -123,47 +128,8 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     }
     return _pinger;
 }
-#pragma mark - tools
-//- (SGNetworkStatus)netWorkDetailStatus{
-//    UIApplication *app = [UIApplication sharedApplication];
-//    UIView *statusBar = [app valueForKeyPath:@"statusBar"];
-//    UIView *foregroundView = [statusBar valueForKeyPath:@"foregroundView"];
-//
-//    UIView *networkView = nil;
-//
-//    for (UIView *childView in foregroundView.subviews) {
-//        if ([childView isKindOfClass:NSClassFromString(@"UIStatusBarDataNetworkItemView")]) {
-//            networkView = childView;
-//        }
-//    }
-//
-//    SGNetworkStatus status = SGNetworkStatusNone;
-//
-//    if (networkView) {
-//        int netType = [[networkView valueForKeyPath:@"dataNetworkType"]intValue];
-//        switch (netType) {
-//            case 0:
-//                status = SGNetworkStatusNone;
-//                break;
-//            case 1://实际上是2G
-//                status = SGNetworkStatusUkonow;
-//                break;
-//            case 2:
-//                status = SGNetworkStatus3G;
-//                break;
-//            case 3:
-//                status = SGNetworkStatus4G;
-//                break;
-//            case 5:
-//                status = SGNetworkStatusWifi;
-//                break;
-//            default:
-//                status = SGNetworkStatusUkonow;
-//                break;
-//        }
-//    }
-//    return status;
-//}
+
+//    MARK:  - tools
 
 - (SGNetworkStatus)netWorkDetailStatus{
     SGNetworkStatus status = SGNetworkStatusNone;

@@ -57,6 +57,9 @@
 #pragma mark - function
 
 - (void)startNotifier{
+    if (self.pinger) {
+        [self stopNotifier];
+    }
     [self startForceIPv4:self.supportIPv4 forceIPv6:self.supportIPv6];
 }
 
@@ -92,11 +95,11 @@
      self.sendTimer = nil;
 }
 
-#pragma mark - delegaet
+//    MARK: - delegaet
+
+//通过地址解析到IP地址，再次发送数据包给指定IP地址
 - (void)simplePing:(SimplePing *)pinger didStartWithAddress:(NSData *)address{
     NSLog(@"didStartPingWithAddress: %@",[self addressWithData:address]);
-    self.starttime = CFAbsoluteTimeGetCurrent();
-    
     [self sendPing];
     
     if (!_sendTimer) {
@@ -105,11 +108,7 @@
 }
 
 //发送成功,sequenceNumber范围:0~65535,超范围后从 0 开始
-
 - (void)simplePing:(SimplePing *)pinger didSendPacket:(NSData *)packet sequenceNumber:(uint16_t)sequenceNumber{
-    self.spendtime = CFAbsoluteTimeGetCurrent() - self.starttime;
-    NSLog(@"#%u sent send time == %@", sequenceNumber,@(self.spendtime*1000));
-    
     if(sequenceNumber == 0){//重置
         [self.array removeAllObjects];
     }
@@ -135,6 +134,8 @@
 
 //接收成功
 - (void)simplePing:(SimplePing *)pinger didReceivePingResponsePacket:(NSData *)packet sequenceNumber:(uint16_t)sequenceNumber{
+    self.spendtime = CFAbsoluteTimeGetCurrent() - self.starttime;
+    NSLog(@"#%u sent send time == %@", sequenceNumber,@(self.spendtime*1000));
     //有网
      self.reachable = YES;
     [self.array removeAllObjects];
