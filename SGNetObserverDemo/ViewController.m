@@ -17,14 +17,11 @@
 
 @end
 
-//UIKIT_EXTERN NSNotificationName const UIApplicationDidEnterBackgroundNotification
-//UIKIT_EXTERN NSNotificationName const UIApplicationDidBecomeActiveNotification;
-
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     self.observer = [SGNetObserver defultObsever];
+     self.observer = [SGNetObserver observerWithHost:@"test.thefront.com.cn"];
     [self viewLayout];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:SGReachabilityChangedNotification object:nil];
 }

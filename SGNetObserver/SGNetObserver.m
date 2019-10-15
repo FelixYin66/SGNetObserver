@@ -43,8 +43,18 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
         _networkStatus = -1;
         _failureTimes = 2;
         _interval = 1.0;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     }
     return self;
+}
+
+- (void) enterBackground{
+    [self stopNotifier];
+}
+
+- (void) becomeActive{
+    [self startNotifier];
 }
 
 - (void)dealloc{
