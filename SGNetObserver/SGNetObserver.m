@@ -60,6 +60,8 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
 - (void)dealloc{
     [self.hostReachability stopNotifier];
     [self.pinger stopNotifier];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 //    MARK:  - function
