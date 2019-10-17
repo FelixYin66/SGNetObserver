@@ -83,14 +83,15 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     __block BOOL canUse = NO;
     NSString *urlString = self.openURL;
     // 使用信号量实现NSURLSession同步请求
+    __weak typeof(self) weakSelf = self;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
         if (res.statusCode == 200 && !error) {
-             self.urlCanOpen = YES;
+             weakSelf.urlCanOpen = YES;
             NSLog(@"手机所连接的网络是可以访问互联网的");
         }else{
-            self.urlCanOpen = NO;
+            weakSelf.urlCanOpen = NO;
             NSLog(@"手机无法访问互联网");
         }
         dispatch_semaphore_signal(semaphore);
