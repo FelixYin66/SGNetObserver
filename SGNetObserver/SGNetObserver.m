@@ -79,8 +79,7 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     [self.pinger stopNotifier];
 }
 
-- (BOOL)checkNetCanUse {
-    __block BOOL canUse = NO;
+- (void)checkNetCanUse {
     NSString *urlString = self.openURL;
     // 使用信号量实现NSURLSession同步请求
     __weak typeof(self) weakSelf = self;
@@ -97,7 +96,6 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
         dispatch_semaphore_signal(semaphore);
     }] resume];
     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    return canUse;
 }
 
 
@@ -107,7 +105,7 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     //获取两种方法得到的联网状态,并转为BOOL值
     BOOL status1 = [self.hostReachability currentReachabilityStatus];
     BOOL status2 =  self.pinger.reachable;
-    self.urlCanOpen = [self checkNetCanUse];
+    [self checkNetCanUse];
     //综合判断网络,判断原则:Reachability -> pinger
     if ((status1 && status2) || (status1 && self.urlCanOpen)) {
         //有网
