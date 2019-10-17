@@ -38,6 +38,9 @@ typedef NS_ENUM(NSUInteger, SGNetworkStatus) {
  */
 @property (nonatomic,assign) SGNetworkStatus networkStatus;
 
+
+@property(nonatomic,assign) BOOL urlCanOpen; //检测URL是否可以打开
+
 /**
  * delegate,如果设定,只走代理,不发全局通知.否则只发全局通知
  */
@@ -71,7 +74,7 @@ typedef NS_ENUM(NSUInteger, SGNetworkStatus) {
 /**
  *  自定义地址
  */
-+ (instancetype)observerWithHost:(NSString *)host;
++ (instancetype)observerWithHost:(NSString *)host openURL:(NSString *) openURL;
 
 /**
  *  开始监控

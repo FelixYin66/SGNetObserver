@@ -16,6 +16,7 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
 @interface SGNetObserver()
 
 @property (nonatomic,copy) NSString *host;
+@property(nonatomic,copy) NSString *openURL;
 
 @property (nonatomic,strong) Reachability *hostReachability;
 
@@ -29,12 +30,14 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
 + (instancetype)defultObsever{
     SGNetObserver *obsever = [[self alloc] init];
     obsever.host = @"www.baidu.com";
+    obsever.openURL = @"https://www.baidu.com";
     return obsever;
 }
 
-+ (instancetype)observerWithHost:(NSString *)host{
++ (instancetype)observerWithHost:(NSString *)host openURL:(NSString *)openURL{
     SGNetObserver *obsever = [[self alloc] init];
     obsever.host = host;
+    obsever.openURL = openURL;
     return obsever;
 }
 
@@ -76,14 +79,36 @@ NSString *SGReachabilityChangedNotification = @"SGNetworkReachabilityChangedNoti
     [self.pinger stopNotifier];
 }
 
+- (BOOL)checkNetCanUse {
+    __block BOOL canUse = NO;
+    NSString *urlString = self.openURL;
+    // 使用信号量实现NSURLSession同步请求
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urlString] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+        if (res.statusCode == 200 && !error) {
+             self.urlCanOpen = YES;
+            NSLog(@"手机所连接的网络是可以访问互联网的");
+        }else{
+            self.urlCanOpen = NO;
+            NSLog(@"手机无法访问互联网");
+        }
+        dispatch_semaphore_signal(semaphore);
+    }] resume];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    return canUse;
+}
+
+
 //    MARK: - delegate
 
 - (void)networkStatusDidChanged{
     //获取两种方法得到的联网状态,并转为BOOL值
     BOOL status1 = [self.hostReachability currentReachabilityStatus];
     BOOL status2 =  self.pinger.reachable;
+    self.urlCanOpen = [self checkNetCanUse];
     //综合判断网络,判断原则:Reachability -> pinger
-    if (status1 && status2) {
+    if ((status1 && status2) || (status1 && self.urlCanOpen)) {
         //有网
         self.networkStatus = self.netWorkDetailStatus;
     }else{

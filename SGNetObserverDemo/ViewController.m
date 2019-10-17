@@ -21,7 +21,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     self.observer = [SGNetObserver observerWithHost:@"test.thefront.com.cn"];
+//    test.thefront.com.cn
+     self.observer = [SGNetObserver observerWithHost:@"www.baidu.com" openURL:@"https://www.baidu.com"];
     [self viewLayout];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusChanged:) name:SGReachabilityChangedNotification object:nil];
 }
