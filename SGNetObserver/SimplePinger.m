@@ -135,7 +135,7 @@
 //接收成功
 - (void)simplePing:(SimplePing *)pinger didReceivePingResponsePacket:(NSData *)packet sequenceNumber:(uint16_t)sequenceNumber{
     self.spendtime = CFAbsoluteTimeGetCurrent() - self.starttime;
-    NSLog(@"#%u sent send time == %@", sequenceNumber,@(self.spendtime*1000));
+//    NSLog(@"#%u sent send time == %@", sequenceNumber,@(self.spendtime*1000));
     //有网
      self.reachable = YES;
     [self.array removeAllObjects];
