@@ -99,7 +99,7 @@
 
 //通过地址解析到IP地址，再次发送数据包给指定IP地址
 - (void)simplePing:(SimplePing *)pinger didStartWithAddress:(NSData *)address{
-    NSLog(@"didStartPingWithAddress: %@",[self addressWithData:address]);
+//    NSLog(@"didStartPingWithAddress: %@",[self addressWithData:address]);
     [self sendPing];
     
     if (!_sendTimer) {
@@ -125,7 +125,7 @@
 
 //发送失败
 - (void)simplePing:(SimplePing *)pinger didFailToSendPacket:(NSData *)packet sequenceNumber:(uint16_t)sequenceNumber error:(NSError *)error{
-    NSLog(@"#%u fail sent",sequenceNumber);
+//    NSLog(@"#%u fail sent",sequenceNumber);
     
     //发送失败,直接认为断网
      self.reachable = NO;
